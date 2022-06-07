@@ -24,7 +24,8 @@ func Say(text string) {
 }
 
 func buildBaloon(text string) string {
-	lines, biggestLineSize := chunkString(text)
+	lines := chunkString(text)
+	biggestLineSize := getBiggestLineSize(lines)
 
 	baloonStart := buildBaloonStart(biggestLineSize)
 	baloonText := buildBaloonText(lines, biggestLineSize)
@@ -33,9 +34,8 @@ func buildBaloon(text string) string {
 	return baloonStart + baloonText + baloonEnd
 }
 
-func chunkString(s string) ([]string, int) {
+func chunkString(s string) []string {
 	var chunks []string
-	var biggestLineSize int
 
 	stringSize := len(s)
 
@@ -52,12 +52,21 @@ func chunkString(s string) ([]string, int) {
 		
 		line := s[startIndex : finalIndex]
 		line = strings.Trim(line, " ")
-		biggestLineSize = max(biggestLineSize, len(line))
 		chunks = append(chunks, line)
 		startIndex = finalIndex
 	}
 
-	return chunks, biggestLineSize
+	return chunks
+}
+
+func getBiggestLineSize(lines []string) int {
+	var biggestLineSize int
+
+	for _, line := range lines {
+		biggestLineSize = max(biggestLineSize, len(line))
+	}
+
+	return biggestLineSize
 }
 
 func max(x, y int) int {
