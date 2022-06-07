@@ -25,11 +25,11 @@ func Say(text string) {
 
 func buildBaloon(text string) string {
 	lines := chunkString(text)
-	biggestLineSize := getBiggestLineSize(lines)
+	baloonWidth := getBaloonWidth(lines)
 
-	baloonStart := buildBaloonStart(biggestLineSize)
-	baloonText := buildBaloonText(lines, biggestLineSize)
-	baloonEnd := buildBaloonEnd(biggestLineSize)
+	baloonStart := buildBaloonStart(baloonWidth)
+	baloonText := buildBaloonText(lines, baloonWidth)
+	baloonEnd := buildBaloonEnd(baloonWidth)
 
 	return baloonStart + baloonText + baloonEnd
 }
@@ -59,7 +59,7 @@ func chunkString(s string) []string {
 	return chunks
 }
 
-func getBiggestLineSize(lines []string) int {
+func getBaloonWidth(lines []string) int {
 	var biggestLineSize int
 
 	for _, line := range lines {
@@ -123,12 +123,12 @@ func getLineDelimiters(lineType, numberOfLines int) [2]string {
 	}
 }
 
-func buildBaloonStart(lineLength int) string {
-	return " " + strings.Repeat("_", lineLength + 2) + "\n"
+func buildBaloonStart(baloonWidth int) string {
+	return " " + strings.Repeat("_", baloonWidth + 2) + "\n"
 }
 
-func buildBaloonEnd(lineLength int) string {
-	return " " + strings.Repeat("-", lineLength + 2) + "\n"
+func buildBaloonEnd(baloonWidth int) string {
+	return " " + strings.Repeat("-", baloonWidth + 2) + "\n"
 }
 
 func buildCow() string {
