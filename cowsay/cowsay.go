@@ -7,6 +7,7 @@ import (
 )
 
 const LINE_LENGTH_LIMIT = 39
+const SPACE = " "
 
 const (
 	FIRST_LINE = iota
@@ -44,7 +45,7 @@ func chunkString(s string) ([]string, int) {
 			finalIndex = stringSize
 		}
 
-		lastSpaceIndex := strings.LastIndex(s[startIndex : finalIndex], " ")
+		lastSpaceIndex := strings.LastIndex(s[startIndex : finalIndex], SPACE)
 		if lastSpaceIndex != -1 && (finalIndex - startIndex) == LINE_LENGTH_LIMIT {
 			finalIndex = startIndex + lastSpaceIndex + 1
 		}
