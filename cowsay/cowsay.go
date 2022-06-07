@@ -45,7 +45,7 @@ func chunkString(s string) ([]string, int) {
 		}
 
 		lastSpaceIndex := strings.LastIndex(s[startIndex : finalIndex], " ")
-		if lastSpaceIndex != -1 && len(s[startIndex : finalIndex]) >= LINE_LENGTH_LIMIT {
+		if lastSpaceIndex != -1 && (finalIndex - startIndex) == LINE_LENGTH_LIMIT {
 			finalIndex = startIndex + lastSpaceIndex + 1
 		}
 		
