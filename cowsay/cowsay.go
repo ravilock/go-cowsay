@@ -15,9 +15,9 @@ const (
 )
 
 func Say(text string) {
-	var cowSay string = "\n"
+	text = strings.ReplaceAll(text, "\n", " ")
 
-	cowSay += buildBaloon(text) + buildCow()
+	cowSay := fmt.Sprintf("\n%s%s", buildBaloon(text), buildCow())
 
 	fmt.Println(cowSay)
 }
