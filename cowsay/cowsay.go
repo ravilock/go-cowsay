@@ -7,6 +7,7 @@ import (
 )
 
 const LINE_LENGTH_LIMIT = 39
+const SPACE = " "
 
 const (
 	FIRST_LINE = iota
@@ -15,26 +16,26 @@ const (
 )
 
 func Say(text string) {
-	var cowSay string = "\n"
+	text = strings.ReplaceAll(text, "\n", " ")
 
-	cowSay += buildBaloon(text) + buildCow()
+	cowSay := fmt.Sprintf("\n%s%s", buildBaloon(text), buildCow())
 
 	fmt.Println(cowSay)
 }
 
 func buildBaloon(text string) string {
-	lines, biggestLineSize := chunkString(text)
+	lines := chunkString(text)
+	baloonWidth := getBaloonWidth(lines)
 
-	baloonStart := buildBaloonStart(biggestLineSize)
-	baloonText := buildBaloonText(lines, biggestLineSize)
-	baloonEnd := buildBaloonEnd(biggestLineSize)
+	baloonStart := buildBaloonStart(baloonWidth)
+	baloonText := buildBaloonText(lines, baloonWidth)
+	baloonEnd := buildBaloonEnd(baloonWidth)
 
 	return baloonStart + baloonText + baloonEnd
 }
 
-func chunkString(s string) ([]string, int) {
+func chunkString(s string) []string {
 	var chunks []string
-	var biggestLineSize int
 
 	stringSize := len(s)
 
@@ -44,19 +45,28 @@ func chunkString(s string) ([]string, int) {
 			finalIndex = stringSize
 		}
 
-		lastSpaceIndex := strings.LastIndex(s[startIndex : finalIndex], " ")
+		lastSpaceIndex := strings.LastIndex(s[startIndex : finalIndex], SPACE)
 		if lastSpaceIndex != -1 && (finalIndex - startIndex) == LINE_LENGTH_LIMIT {
 			finalIndex = startIndex + lastSpaceIndex + 1
 		}
 		
 		line := s[startIndex : finalIndex]
 		line = strings.Trim(line, " ")
-		biggestLineSize = max(biggestLineSize, len(line))
 		chunks = append(chunks, line)
 		startIndex = finalIndex
 	}
 
-	return chunks, biggestLineSize
+	return chunks
+}
+
+func getBaloonWidth(lines []string) int {
+	var biggestLineSize int
+
+	for _, line := range lines {
+		biggestLineSize = max(biggestLineSize, len(line))
+	}
+
+	return biggestLineSize
 }
 
 func max(x, y int) int {
@@ -113,12 +123,12 @@ func getLineDelimiters(lineType, numberOfLines int) [2]string {
 	}
 }
 
-func buildBaloonStart(lineLength int) string {
-	return " " + strings.Repeat("_", lineLength + 2) + "\n"
+func buildBaloonStart(baloonWidth int) string {
+	return " " + strings.Repeat("_", baloonWidth + 2) + "\n"
 }
 
-func buildBaloonEnd(lineLength int) string {
-	return " " + strings.Repeat("-", lineLength + 2) + "\n"
+func buildBaloonEnd(baloonWidth int) string {
+	return " " + strings.Repeat("-", baloonWidth + 2) + "\n"
 }
 
 func buildCow() string {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"os"
 	"strings"
 
@@ -15,8 +16,22 @@ const (
 	LAST_LINE
 )
 
+func getInput() string {
+	if len(os.Args) > 1 {
+		return strings.Join(os.Args[1:], " ")
+	}
+
+	data := os.Stdin
+	scan := bufio.NewScanner(data)
+	var stdinSlice []string
+	for scan.Scan() {
+		stdinSlice = append(stdinSlice, scan.Text()+"\n")
+	}
+	return strings.TrimSuffix(strings.Join(stdinSlice, ""), "\n")
+}
+
 func main() {
-	text := strings.Join(os.Args[1:], " ")
+	text := getInput()
 
 	cowsay.Say(text)
 }
