@@ -1,18 +1,19 @@
+// Package cowsay provides a function to print a cow saying a given text.
 package cowsay
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
-	"fmt"
 )
 
-const LINE_LENGTH_LIMIT = 39
-const SPACE = " "
+const lineLengthLimit = 39
+const space = " "
 
 const (
-	FIRST_LINE = iota
-	NORMAL_LINE
-	LAST_LINE
+	FirstLine = iota
+	NormalLine
+	LastLine
 )
 
 func Say(text string) {
@@ -40,17 +41,17 @@ func chunkString(s string) []string {
 	stringSize := len(s)
 
 	for startIndex := 0; startIndex < stringSize; {
-		finalIndex := startIndex + LINE_LENGTH_LIMIT
+		finalIndex := startIndex + lineLengthLimit
 		if finalIndex > stringSize {
 			finalIndex = stringSize
 		}
 
-		lastSpaceIndex := strings.LastIndex(s[startIndex : finalIndex], SPACE)
-		if lastSpaceIndex != -1 && (finalIndex - startIndex) == LINE_LENGTH_LIMIT {
+		lastSpaceIndex := strings.LastIndex(s[startIndex:finalIndex], space)
+		if lastSpaceIndex != -1 && (finalIndex-startIndex) == lineLengthLimit {
 			finalIndex = startIndex + lastSpaceIndex + 1
 		}
-		
-		line := s[startIndex : finalIndex]
+
+		line := s[startIndex:finalIndex]
 		line = strings.Trim(line, " ")
 		chunks = append(chunks, line)
 		startIndex = finalIndex
@@ -60,24 +61,17 @@ func chunkString(s string) []string {
 }
 
 func getBaloonWidth(lines []string) int {
-	var biggestLineSize int
-
+	biggestLineSize := 0
 	for _, line := range lines {
-		biggestLineSize = max(biggestLineSize, len(line))
+		if len(line) > biggestLineSize {
+			biggestLineSize = len(line)
+		}
 	}
-
 	return biggestLineSize
 }
 
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
-}
-
 func buildBaloonText(lines []string, biggestLineSize int) string {
-	var baloonText string
+	var builder strings.Builder
 
 	numberOfLines := len(lines)
 
@@ -86,10 +80,13 @@ func buildBaloonText(lines []string, biggestLineSize int) string {
 		lineType := getLineType(lineIndex, numberOfLines)
 		lineDelimiters := getLineDelimiters(lineType, numberOfLines)
 
-		baloonText += lineDelimiters[0] + line + lineDelimiters[1] + "\n"
+		builder.WriteString(lineDelimiters[0])
+		builder.WriteString(line)
+		builder.WriteString(lineDelimiters[1])
+		builder.WriteString("\n")
 	}
 
-	return baloonText
+	return builder.String()
 }
 
 func fixLineSize(line string, size int) string {
@@ -100,11 +97,11 @@ func fixLineSize(line string, size int) string {
 func getLineType(lineIndex, numberOfLines int) int {
 	switch lineIndex {
 	case 0:
-		return FIRST_LINE
+		return FirstLine
 	case numberOfLines - 1:
-		return LAST_LINE
+		return LastLine
 	default:
-		return NORMAL_LINE
+		return NormalLine
 	}
 }
 
@@ -114,9 +111,9 @@ func getLineDelimiters(lineType, numberOfLines int) [2]string {
 	}
 
 	switch lineType {
-	case FIRST_LINE:
+	case FirstLine:
 		return [2]string{"/ ", " \\"}
-	case LAST_LINE:
+	case LastLine:
 		return [2]string{"\\ ", " /"}
 	default:
 		return [2]string{"| ", " |"}
@@ -124,11 +121,11 @@ func getLineDelimiters(lineType, numberOfLines int) [2]string {
 }
 
 func buildBaloonStart(baloonWidth int) string {
-	return " " + strings.Repeat("_", baloonWidth + 2) + "\n"
+	return " " + strings.Repeat("_", baloonWidth+2) + "\n"
 }
 
 func buildBaloonEnd(baloonWidth int) string {
-	return " " + strings.Repeat("-", baloonWidth + 2) + "\n"
+	return " " + strings.Repeat("-", baloonWidth+2) + "\n"
 }
 
 func buildCow() string {
