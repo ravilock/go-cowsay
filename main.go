@@ -8,14 +8,6 @@ import (
 	"github.com/ravilock/go-cowsay/cowsay"
 )
 
-const LINE_LENGTH_LIMIT = 40
-
-const (
-	FIRST_LINE = iota
-	NORMAL_LINE
-	LAST_LINE
-)
-
 func getInput() string {
 	if len(os.Args) > 1 {
 		return strings.Join(os.Args[1:], " ")

@@ -1,15 +1,15 @@
 package cowsay
 
 import (
+	"fmt"
 	"log"
 	"os/exec"
-	"fmt"
 	"testing"
 )
 
 func assertOutput(t testing.TB, got, want string) {
 	t.Helper()
-	
+
 	if got != want {
 		fmt.Println(got)
 		fmt.Println(want)
