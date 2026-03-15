@@ -1,3 +1,4 @@
+// Package main provides the entry point for the cowsay application.
 package main
 
 import (
@@ -8,12 +9,12 @@ import (
 	"github.com/ravilock/go-cowsay/cowsay"
 )
 
-const LINE_LENGTH_LIMIT = 40
+const lineLengthLimit = 40
 
 const (
-	FIRST_LINE = iota
-	NORMAL_LINE
-	LAST_LINE
+	firstLine = iota
+	normalLine
+	lastLine
 )
 
 func getInput() string {
